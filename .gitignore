@@ -22,3 +22,9 @@ _testmain.go
 *.exe
 *.test
 *.prof
+
+# revel
+tmp/
+routes/
+test-results/
+revel/revel
