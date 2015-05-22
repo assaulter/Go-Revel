@@ -1,12 +1,26 @@
 package controllers
 
-import "github.com/revel/revel"
+import (
+	"Go-Revel/app/models"
+	"fmt"
+
+	"github.com/revel/revel"
+)
 
 type App struct {
 	*revel.Controller
 }
 
 func (c App) Index() revel.Result {
+	// db格納と取得のサンプル
+	// DbMap.Insert(&models.User{0, "user"})
+
+	rows, _ := DbMap.Select(models.User{}, "select * from user")
+	for _, row := range rows {
+		user := row.(*models.User)
+		fmt.Printf("%d, %s\n", user.Id, user.Name)
+	}
+
 	return c.Render()
 }
 
