@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"Go-Revel/app/models"
-
 	"log"
 
 	"github.com/revel/revel"
@@ -36,6 +35,20 @@ func (c App) Index() revel.Result {
 	for i, u := range users {
 		log.Printf(" %d: %v\n", i, u)
 	}
+
+	// delete row by PK
+	count, err := dbmap.Delete(&u1)
+	checkErr(err, "Delete failed")
+	log.Println("Rows deleted:", count)
+
+	// delete row manually via Exec
+	_, err = dbmap.Exec("delete from users where user_id=?", u2.Id)
+	checkErr(err, "Exec failed")
+
+	// confirm count is zero
+	count, err = dbmap.SelectInt("select count (*) from users")
+	checkErr(err, "select count (*) failed")
+	log.Println("Row count - should be zero:", count)
 
 	return c.Render()
 }
