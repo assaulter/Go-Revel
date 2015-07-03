@@ -1,6 +1,6 @@
 package models
 
 type User struct {
-	Id   int
-	Name string
+	Id   int    `db:"user_id"`
+	Name string `db:user_name,size:24`
 }
