@@ -17,18 +17,19 @@ func (c App) Index() revel.Result {
 	defer dbmap.Db.Close()
 
 	// delete any existing rows
-	err := dbmap.TruncateTables()
-	checkErr(err, "Trucate failed")
+	// err := dbmap.TruncateTables()
+	// checkErr(err, "Trucate failed")
 
 	// insert user
-	u1 := models.User{0, "user1"}
-	u2 := models.User{1, "user2"}
+	// u1 := models.User{0, "user1"}
+	// u2 := models.User{1, "user2"}
 
-	err = dbmap.Insert(&u1, &u2)
-	checkErr(err, "Insert failed")
+	// err = dbmap.Insert(&u1, &u2)
+	// checkErr(err, "Insert failed")
 
 	// fetch all rows
 	var users []models.User
+	var err error
 	_, err = dbmap.Select(&users, "select * from users order by user_id")
 	checkErr(err, "Select failed")
 	log.Printf("All rows:")
@@ -37,20 +38,20 @@ func (c App) Index() revel.Result {
 	}
 
 	// delete row by PK
-	count, err := dbmap.Delete(&u1)
-	checkErr(err, "Delete failed")
-	log.Println("Rows deleted:", count)
+	// count, err := dbmap.Delete(&u1)
+	// checkErr(err, "Delete failed")
+	// log.Println("Rows deleted:", count)
 
 	// delete row manually via Exec
-	_, err = dbmap.Exec("delete from users where user_id=?", u2.Id)
-	checkErr(err, "Exec failed")
+	// _, err = dbmap.Exec("delete from users where user_id=?", u2.Id)
+	// checkErr(err, "Exec failed")
 
 	// confirm count is zero
-	count, err = dbmap.SelectInt("select count (*) from users")
-	checkErr(err, "select count (*) failed")
-	log.Println("Row count - should be zero:", count)
+	// count, err = dbmap.SelectInt("select count (*) from users")
+	// checkErr(err, "select count (*) failed")
+	// log.Println("Row count - should be zero:", count)
 
-	return c.Render()
+	return c.Render(users)
 }
 
 func (c App) Hello(myName string) revel.Result {
