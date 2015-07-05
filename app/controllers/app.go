@@ -54,6 +54,22 @@ func (c App) Index() revel.Result {
 	return c.Render(users)
 }
 
+// add user
+func (c App) Create(name string) revel.Result {
+	log.Printf("%v", name)
+	// Todo: Validation
+	// initialize the DbMap
+	dbmap := InitDb()
+	defer dbmap.Db.Close()
+
+	var err error
+	user := &models.User{0, name}
+	err = dbmap.Insert(user)
+	checkErr(err, "Insert failed")
+
+	return c.Redirect(App.Index)
+}
+
 func (c App) Hello(myName string) revel.Result {
 	c.Validation.Required(myName).Message("Your name is required!")
 	c.Validation.MinSize(myName, 3).Message("Your name is not long enough!")
