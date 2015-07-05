@@ -11,61 +11,56 @@ type App struct {
 	*revel.Controller
 }
 
+// show todos
 func (c App) Index() revel.Result {
 	// initialize the DbMap
 	dbmap := InitDb()
 	defer dbmap.Db.Close()
-
-	// delete any existing rows
-	// err := dbmap.TruncateTables()
-	// checkErr(err, "Trucate failed")
-
-	// insert user
-	// u1 := models.User{0, "user1"}
-	// u2 := models.User{1, "user2"}
-
-	// err = dbmap.Insert(&u1, &u2)
-	// checkErr(err, "Insert failed")
+	// set up initial data
+	// SetUpData()
 
 	// fetch all rows
-	var users []models.User
+	var todos []models.Todo
 	var err error
-	_, err = dbmap.Select(&users, "select * from users order by user_id")
+	_, err = dbmap.Select(&todos, "select * from todos order by todo_id")
 	checkErr(err, "Select failed")
 	log.Printf("All rows:")
-	for i, u := range users {
+	for i, u := range todos {
 		log.Printf(" %d: %v\n", i, u)
 	}
 
-	// delete row by PK
-	// count, err := dbmap.Delete(&u1)
-	// checkErr(err, "Delete failed")
-	// log.Println("Rows deleted:", count)
-
-	// delete row manually via Exec
-	// _, err = dbmap.Exec("delete from users where user_id=?", u2.Id)
-	// checkErr(err, "Exec failed")
-
-	// confirm count is zero
-	// count, err = dbmap.SelectInt("select count (*) from users")
-	// checkErr(err, "select count (*) failed")
-	// log.Println("Row count - should be zero:", count)
-
-	return c.Render(users)
+	return c.Render(todos)
 }
 
-// add user
-func (c App) Create(name string) revel.Result {
-	log.Printf("%v", name)
+// add todo
+func (c App) Create(todo models.Todo) revel.Result {
 	// Todo: Validation
 	// initialize the DbMap
 	dbmap := InitDb()
 	defer dbmap.Db.Close()
 
 	var err error
-	user := &models.User{0, name}
-	err = dbmap.Insert(user)
+	err = dbmap.Insert(&todo)
 	checkErr(err, "Insert failed")
+
+	return c.Redirect(App.Index)
+}
+
+// change status to done
+func (c App) Done(id string) revel.Result {
+	log.Print(id)
+
+	dbmap := InitDb()
+	defer dbmap.Db.Close()
+
+	obj, err := dbmap.Get(models.Todo{}, id)
+	checkErr(err, "Get failed")
+	t := obj.(*models.Todo)
+	t.Done = true
+
+	count, err := dbmap.Update(t)
+	checkErr(err, "Update failed")
+	log.Print(count)
 
 	return c.Redirect(App.Index)
 }

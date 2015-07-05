@@ -17,17 +17,28 @@
     <div class="span6">
       {{template "flash.html" .}}
       <form action="/" method="POST">
-        {{with $field := field "name" .}}
+        {{with $field := field "todo.Title" .}}
           <input type="text" name="{{$field.Name}}" value="{{$field.Flash}}"/><br/>
         {{end}}
-        <input type="submit" value="add user" />
+        <input type="submit" value="add todo" />
       </form>
     </div>
   </div>
   <div class="row">
-    {{range $index, $user := .users}}
-      <p>{{.Id}}</p>
-      <p>{{.Name}}</p>
+    {{range $index, $todo := .todos}}
+      {{if .Done}}
+        <span class="delete">{{.Id}}</span>
+        <span class="delete">{{.Title}}</span>
+        <br/>
+      {{else}}
+        <span>{{.Id}}</span>
+        <span>{{.Title}}</span>
+        <form action="/done" method="POST">
+          <input type="hidden" name="id" value="1"/>
+          <input type="submit" value="done!" />
+        </form>
+        <br/>
+      {{end}}
     {{end}}
   </div>
 </div>
