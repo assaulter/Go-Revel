@@ -13,36 +13,45 @@ type Todo struct {
 	Done  bool   `db:"todo_done"`
 }
 
-func (t Todo) Insert() error {
+func openClose(fn func(dbmap *gorp.DbMap)) {
 	dbmap := initDb()
 	defer dbmap.Db.Close()
 
-	err := dbmap.Insert(&t)
+	fn(dbmap)
+}
 
+func (t Todo) Insert() error {
+	var err error
+	openClose(func(dbmap *gorp.DbMap) {
+		err = dbmap.Insert(&t)
+	})
 	return err
 }
 
 func TodoDone(id string) error {
-	dbmap := initDb()
-	defer dbmap.Db.Close()
+	var err error
+	var obj interface{}
+	var count int64
 
-	obj, err := dbmap.Get(Todo{}, id)
-	task := obj.(*Todo)
-	task.Done = true
+	openClose(func(dbmap *gorp.DbMap) {
+		obj, err = dbmap.Get(Todo{}, id)
+		task := obj.(*Todo)
+		task.Done = true
 
-	count, err := dbmap.Update(task)
-	log.Println("update count: %d", count)
+		count, err = dbmap.Update(task)
+		log.Println("update count: %d", count)
+	})
 
 	return err
 }
 
 func AllTodos() ([]Todo, error) {
-	dbmap := initDb()
-	defer dbmap.Db.Close()
-	// fetch all rows
 	var err error
 	var todos []Todo
-	_, err = dbmap.Select(&todos, "select * from todos order by todo_id")
+	// fetch all rows
+	openClose(func(dbmap *gorp.DbMap) {
+		_, err = dbmap.Select(&todos, "select * from todos order by todo_id")
+	})
 
 	return todos, err
 }
