@@ -30,9 +30,10 @@ controllers/gorp.go
   InitDb周りの処理を全部modelに持っていく。
 
 ---なう
-
+* Validationと失敗時の処理
+http://whizdumb.me/2015/02/01/validating-domain-objects-in-revel/
 
 ---まだ
 * TodoモデルのValidation
-* Validation失敗時の処理
+
 * bootstrapを入れる
