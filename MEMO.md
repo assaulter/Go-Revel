@@ -25,10 +25,14 @@ controllers/gorp.go
 * 画面から追加
 * UserモデルをTodoモデルに変更
 * 画面からタスクの完了が出来る
+* DB周りのリファクタリング
+  参考:http://yuroyoro.hatenablog.com/entry/2014/06/15/173043
+  InitDb周りの処理を全部modelに持っていく。
+
+---なう
+
 
 ---まだ
 * TodoモデルのValidation
 * Validation失敗時の処理
 * bootstrapを入れる
-* DB周りのリファクタリング
-  参考:http://yuroyoro.hatenablog.com/entry/2014/06/15/173043

@@ -34,7 +34,7 @@
         <span>{{.Id}}</span>
         <span>{{.Title}}</span>
         <form action="/done" method="POST">
-          <input type="hidden" name="id" value="1"/>
+          <input type="hidden" name="id" value="{{.Id}}"/>
           <input type="submit" value="done!" />
         </form>
         <br/>
