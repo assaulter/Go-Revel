@@ -27,14 +27,14 @@
   <div class="row">
     {{range $index, $todo := .todos}}
       {{if .Done}}
-        <span class="delete">{{.Id}}</span>
+        <span class="delete">{{.ID}}</span>
         <span class="delete">{{.Title}}</span>
         <br/>
       {{else}}
         <span>{{.Id}}</span>
         <span>{{.Title}}</span>
         <form action="/done" method="POST">
-          <input type="hidden" name="id" value="{{.Id}}"/>
+          <input type="hidden" name="id" value="{{.ID}}"/>
           <input type="submit" value="done!" />
         </form>
         <br/>

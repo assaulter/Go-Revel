@@ -8,7 +8,7 @@ import (
 )
 
 type Todo struct {
-	Id    int    `db:"todo_id"`
+	ID    int    `db:"todo_id"`
 	Title string `db:"todo_title"`
 	Done  bool   `db:"todo_done"`
 }
@@ -58,7 +58,7 @@ func initDb() *gorp.DbMap {
 
 	// add a table, setting the table name to 'posts' and
 	// specifying that the Id property is an auto incrementing PK
-	dbmap.AddTableWithName(Todo{}, "todos").SetKeys(true, "Id")
+	dbmap.AddTableWithName(Todo{}, "todos").SetKeys(true, "ID")
 
 	// create the table. in a production system you'd generally
 	// use a migration tool, or create the tables via scripts
